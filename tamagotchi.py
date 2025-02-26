@@ -1,5 +1,6 @@
 import time
 import random
+import threading
 
 class item:
     def __init__(self, name, type, effect):
@@ -27,6 +28,11 @@ class tamagotchi:
         self.strength = 5
         self.money = 15
         self.inventory = []
+        self.alive = True
+
+    #def decay_overtime(self):
+        #while self.alive:
+            #time.sleep()
 
     def show_inventory(self):
         if not self.inventory:
@@ -44,7 +50,22 @@ class tamagotchi:
             item_names.append(item.name)
     
         print(f"{self.name}'s stats: hunger: {self.hunger}, energy: {self.energy}, happiness: {self.happiness}, thirst: {self.thirst}")
-    
+
+    def mood(self):
+        if self.hunger <= 3:
+            return f"{pet.name} is starving."
+        if self.thirst <= 3:
+            return f"{pet.name} is dehydrated."
+        if self.hunger == 0 or self.thirst == 0:
+            self.die() 
+            print(f"{pet.name} has died.")
+        if self.happiness >= 10:
+            return f"{pet.name} is happy."
+        if self.happiness >= 6:
+            return f"{pet.name} is neutral." 
+        if self.happiness >= 3:
+            return f"{pet.name} is sad."
+           
     def feed(self):
         self.show_inventory()
         
@@ -72,6 +93,12 @@ class tamagotchi:
             print(f"\n{self.name} has been given {selected_item.name}. Their thirst is now {self.thirst}.")
         else:
             print("The item you are choosing isn't a liquid!")
+
+
+    def die(self):
+        print(f"{pet.name} has died because you failed to take care of it properly.")
+        pet.alive = False
+
 
     def play(self):
         self.show_inventory()
@@ -113,7 +140,8 @@ class tamagotchi:
             "Legendary": [breed("hydra", ["acceptional strength"], income_bonus=2)]
         }
         
-    #def trainer(self)
+    #def trainer(self):
+
     #def colosseum(self)
 
     def money(self):
@@ -167,11 +195,11 @@ pet.inventory.append(item("Waffle", "food", 5))
 pet.inventory.append(item("Toy Hammer", "toy", 5))
 pet.inventory.append(item("Water", "liquid", 3))
 
-while True:
+while pet.alive:
 
     print("\nWhat would you like to do?")
     print("\n=====================================")
-    print('Type "help" if you want to learn more about the game.')
+    print('Type "help" if you want to know more.')
     print("=====================================")
     print("\nOptions:")
     print("\n1. Feed")
