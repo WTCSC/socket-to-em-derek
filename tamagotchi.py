@@ -1,3 +1,6 @@
+import time
+import random
+
 class item:
     def __init__(self, name, type, effect):
         self.name = name
@@ -15,11 +18,6 @@ class tamagotchi:
         self.thirst = 5
         self.money = 15
         self.inventory = []
-
-class breed:
-    def __init__(self, breed, traits):
-        self.breed = breed
-        self.traits = traits
 
     def show_inventory(self):
         if not self.inventory:
@@ -41,24 +39,47 @@ class breed:
         print(f"{self.name}'s stats: hunger: {self.hunger}, energy: {self.energy}, happiness: {self.happiness}, thirst: {self.thirst}")
     
     def feed(self, item):
-        if not self.inventory:
-            return "Inventory is empty."
-            
         self.show_inventory()
         
-        user_input = input("\nPick the number of the item you would like to select:")
+        user_input = input("\nPick the number of the food item you would like to select:")
         item_index = int(user_input) -1
         
         selected_item = self.inventory[item_index]
         if selected_item.type == "food":
             self.hunger -= selected_item.effect
-            print(f"{self.name}, has been feed with {selected_item}. They're hunger is now {self.hunger}.")
+            self.inventory.pop(item_index)
+            print(f"\n{self.name} has been feed with {selected_item.name}. Their hunger is now {self.hunger}.")
         else:
             print("Go find some more food!")
-            
+    
+    def water(self):
+        self.show_inventory()
 
-            
-    def use_item (self, item):
+        user_input = input("\nPick the number of the liquid you would like:")
+        item_index = int(user_input) -1
+
+        selected_item = self.inventory[item_index]
+        if selected_item.type == "liquid":
+            self.thirst -= selected_item.effect
+            self.inventory.pop(item_index)
+            print(f"\n{self.name} has been given {selected_item.name}. Their thirst is now {self.thirst}.")
+        else:
+            print("The item you are choosing isn't a liquid!")
+
+    def play(self):
+        self.show_inventory()
+
+        user_input = input("\nPick the number of toy you would like:")
+        item_index = int(user_input) -1 
+
+        item_picked = self.inventory[item_index]
+        if item_picked.type == "toy":
+            self.thirst -= item_picked.effect
+            self.inventory.pop(item_index)
+            print(f"\n{self.name}'s happiness has increased by {self.happiness} after playing with {item_picked.name}")
+
+
+    def use_item(self, item):
         if item.type == "food":
             self.hunger -= item.effect_value
         elif item.type == "toy":
@@ -68,20 +89,85 @@ class breed:
         else:
             print("You cannot use this item.")
 
+    def money(self):
+        print(f"You currently have ${self.inventory} in spending cash.")
+    
+    def job(self):
+        print("\nWhich job would you like to perform?")
+        print("1. Picking up trash - 2 dollars per piece of trash")
+        print("2. Look for change under vending machines - 1 to 5 dollars based on the vending machine")
         
+        user_input = input("\nEnter the number of the job you would like to perform: ")
 
-pancake = item("Pancake", "food", 4)
-waffle = item("Waffle", "food", 5)    
-toy_hammer = item("Toy Hammer", "toy", 5)
-water = item("Water", "liquid", 3)
+        if user_input == "1":
+            print("Picking up trash...")
+            time.sleep(10)
+            self.money += 2
+        if user_input == "2":
+            print("Looking for change...")
 
-pet1 = tamagotchi("dragon", 20, 20, 20, 20)
+    #def shop(self):
+
+    
+    #def breed(self):
+
+    #def trade(self):
+
+class breed:
+    def __init__(self, breed, traits):
+        self.breed = breed
+        self.traits = traits
 
 user_name = input("Enter the name of your pet: ")
-
 pet = tamagotchi(user_name) 
 
-#def play():
+pet.inventory.append(item("Pancake", "food", 4))
+pet.inventory.append(item("Waffle", "food", 5))
+pet.inventory.append(item("Toy Hammer", "toy", 5))
+pet.inventory.append(item("Water", "liquid", 3))
 
-        
-#def water():
+while True:
+
+    print("\nWhat would you like to do?")
+    print("Options:")
+    print("1. Feed")
+    print("2. Water")
+    print("3. Play")
+    print("4. See your savings")
+    print("5. Work a job")
+    print("6. Exit")
+
+    user_input = input("\nEnter the number of the thing you would like to do: ")
+
+    if user_input == "1":
+        pet.feed(pet.inventory[0])
+    if user_input == "2":
+        pet.water()
+    if user_input == "3":
+        pet.play()
+    if user_input == "4":
+        pet.money()
+    #if user_input == "5":
+
+    if user_input == "6":
+        print("Bye, bye! {pet.name} will be lonely without you.")
+        break 
+
+#pet.status()
+#pet.feed(pet.inventory[0])
+#pet.water()
+#pet.play()
+#pet.status()
+
+
+
+# stored_items = [
+#     pancake = item("Pancake", "food", 4),
+#     waffle = item("Waffle", "food", 5), 
+#     toy_hammer = item("Toy Hammer", "toy", 5),
+#     water = item("Water", "liquid", 3), 
+#     ]
+
+#pet1 = tamagotchi("dragon", 20, 20, 20, 20)
+
+
