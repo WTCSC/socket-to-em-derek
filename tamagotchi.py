@@ -137,10 +137,14 @@ class tamagotchi:
         breeds = {
             "Common": [breed("dog", ["loyal"], income_bonus=1)],
             "Rare": [breed("wolf", ["wise"], income_bonus=1.5)],
-            "Legendary": [breed("hydra", ["acceptional strength"], income_bonus=2)]
+            "Legendary": [breed("hydra", ["acceptional strength"], income_bonus=2)],
+            "Ultra Rare": [breed("dogoo", ["crazy buffs"], income_bonus=20)]
         }
         
-    #def trainer(self):
+    def trainer(self):
+        print("Here you can train your pet to get stronger before they fight in the colosseum.")
+
+
 
     #def colosseum(self)
 
