@@ -160,6 +160,26 @@ class tamagotchi:
         
         rarity = None
 
+        for rarity_type in breed.keys():
+            if rarity_type in item_picked.name:
+                rarity = rarity_type
+                break
+
+        if not rarity:
+            rarity = "Common"
+
+        new_breed = random.choice(breeds[rarity])
+
+        self.breed = new_breed
+
+        print(f"Congratulation! Your egg hatched into a {new_breed.name}!")
+        print(f"Traits: {new_breed.traits}")
+        print(f"Income bonus: {new_breed.income_bonus}")
+
+        if new_breed.happiness_increase != 1:
+            print(f"Happiness bonus: {new_breed.happiness_increase}")
+        if new_breed.hunger_decay != 1:
+            print(f"Hunger Reduction: {new_breed.hunger_decay}")
 
     #def trainer(self):
         #print("Here you can train your pet to get stronger before they fight in the colosseum.")
@@ -168,7 +188,7 @@ class tamagotchi:
     #def colosseum(self):
 
     def money(self):
-        print(f"You currently have ${self.inventory} in spending cash.")
+        print(f"You currently have ${self.money} in spending cash.")
     
     def job(self):
         print("\nWhich job would you like to perform?")
@@ -190,24 +210,43 @@ class tamagotchi:
             self.money += num
             print(f"You earned {num} dollars from looking for change!")
 
-    def shop(self, item):
+    def shop(self):
         print("\nWelcome to the shop!")
          
-        stored_items = [
-        item("Pancake", "food", 4, 5),
-        item("Waffle", "food", 5, 5),
-        item("Toy Hammer", "toy", 5, 5),
-        item("Toy Ball", "toy", 4, 6),
-        item("Water", "liquid", 3, 5),
-        item("Apple Juice", "liquid", 3, 5),
-        item("Soda", "liquid", 2, 3),
-        item("Egg (Common)", "egg", None, 5),
-        item("Egg (Rare)", "egg", None, 10),
-        item("Egg (Legendary)", "egg", None, 20),
-        item("Egg (Ultra Rare)", "egg", None, 100)
-    ]
-        
+        stored_items = {
+        "Pancake": {type: "food", "effect": 4, "price": 5}
+        #"Waffle", "food", 5, 5),
+        #"Toy Hammer", "toy", 5, 5),
+        #"Toy Ball", "toy", 4, 6),
+        #"Water", "liquid", 3, 5),
+        #"Apple Juice", "liquid", 3, 5),
+        #"Soda", "liquid", 2, 3),
+        #"Egg (Common)", "egg", None, 5),
+        #"Egg (Rare)", "egg", None, 10),
+        #"Egg (Legendary)", "egg", None, 20),
+        #"Egg (Ultra Rare)", "egg", None, 100)
+        }
+ 
+        while True:
+            print(f"\nThe amount in your savings: ${self.money}")
+            print("\nAvailable items:")
+            for name, item_info in stored_items.items():
+                price = item_info["price"]
+                effect = item_info["effect"]
+                if effect is not None:
+                    effect_text = f" (Effect: {effect})" 
+                else:
+                    effect_text = ""
+                    print(f"{name} - ${price}{effect_text}")
 
+            print(f'\nEnter the name of the item you would like to buy, or type "exit" if you wish to leave.')
+            user_input = input("\nItem: ")
+
+            if user_input.lower() == "exit":
+                print("Bye, bye!")
+                return
+
+            
 
 
 user_name = input("Enter the name of your pet: ")
