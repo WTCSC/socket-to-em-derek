@@ -30,10 +30,21 @@ class tamagotchi:
         self.inventory = []
         self.alive = True
 
-    #def decay_overtime(self):
-        #while self.alive:
-            #time.sleep()
+    def decay_overtime(self):
+        while self.alive:
+            time.sleep(200)
+            self.hunger = min(20, self.hunger + 1)
+            self.thirst = min(20, self.thirst + 1)
+            self.happiness = max(0, self.happiness - 1)
 
+            if self.hunger >= 20:
+                print(f"{pet.name} has straved to death.")
+                self.die
+                #break
+            if self.thirst >= 20:
+                print(f"{pet.name} has died of dehydration.")
+                self.die
+                #break
     def show_inventory(self):
         if not self.inventory:
             return "Your inventory is empty."
@@ -52,13 +63,14 @@ class tamagotchi:
         print(f"{self.name}'s stats: hunger: {self.hunger}, energy: {self.energy}, happiness: {self.happiness}, thirst: {self.thirst}")
 
     def mood(self):
-        if self.hunger <= 3:
+        if self.hunger <= 13:
             return f"{pet.name} is starving."
-        if self.thirst <= 3:
-            return f"{pet.name} is dehydrated."
-        if self.hunger == 0 or self.thirst == 0:
-            self.die() 
-            print(f"{pet.name} has died.")
+        if self.hunger <= 15:
+            return f"{pet.name} is extremely starved."
+        if self.thirst >= 13:
+            return f"{pet.name} is dehydrated."        
+        if self.thirst >= 15:
+            return f"{pet.name} is severly dehydrated."
         if self.happiness >= 10:
             return f"{pet.name} is happy."
         if self.happiness >= 6:
@@ -67,6 +79,10 @@ class tamagotchi:
             return f"{pet.name} is sad."
            
     def feed(self):
+        if not self.alive:
+            print(f"{self.name} is dead.")
+            return 
+        
         self.show_inventory()
         
         user_input = input("\nPick the number of the food item you would like to select:")
@@ -74,9 +90,9 @@ class tamagotchi:
         
         selected_item = self.inventory[item_index]
         if selected_item.type == "food":
-            self.hunger -= selected_item.effect
+            self.hunger = max(0, self.hunger - selected_item.effect)
             self.inventory.pop(item_index)
-            print(f"\n{self.name} has been feed with {selected_item.name}. Their hunger is now {self.hunger}.")
+            print(f"\n{self.name} has been feed with {selected_item.name}. Their hunger is now at {self.hunger}.")
         else:
             print("Go find some more food!")
     
@@ -88,7 +104,7 @@ class tamagotchi:
 
         selected_item = self.inventory[item_index]
         if selected_item.type == "liquid":
-            self.thirst -= selected_item.effect
+            self.thirst = max(0, self.hunger - selected_item.effect)
             self.inventory.pop(item_index)
             print(f"\n{self.name} has been given {selected_item.name}. Their thirst is now {self.thirst}.")
         else:
@@ -111,16 +127,6 @@ class tamagotchi:
             self.thirst -= item_picked.effect
             self.inventory.pop(item_index)
             print(f"\n{self.name}'s happiness has increased by {self.happiness} after playing with {item_picked.name}")
-
-    #def use_item(self, item):
-        #if item.type == "food":
-            #self.hunger -= item.effect_value
-        #elif item.type == "toy":
-            #self.happiness += item.effect_value        
-        #elif item.type == "liquid":
-            #self.thirst -= item.effect_value
-        #else:
-            #print("You cannot use this item.")
             
     def gotcha(self):
         print("Current inventory:")
@@ -135,18 +141,31 @@ class tamagotchi:
             time.sleep(3)
         
         breeds = {
-            "Common": [breed("dog", ["loyal"], income_bonus=1)],
-            "Rare": [breed("wolf", ["wise"], income_bonus=1.5)],
-            "Legendary": [breed("hydra", ["acceptional strength"], income_bonus=2)],
-            "Ultra Rare": [breed("dogoo", ["crazy buffs"], income_bonus=20)]
+            "Common": [
+                breed("dog", ["loyal"], income_bonus=1.2, happiness_increase=1.2),
+                breed("cat", ["independent"], income_bonus=1.1, hunger_decay=0.9)
+                ],
+            
+            "Rare": [
+                breed("wolf", ["wise"], income_bonus=1.5),
+                breed("phoenix", ["fiery"], income_bonus=1.4, hunger_decay=0.8)
+                ],
+            "Legendary": [
+                breed("hydra", ["acceptional strength"], income_bonus=2)
+                ],
+            "Ultra Rare": [
+                breed("dogoo", ["crazy buffs"], income_bonus=5, happiness_increase=2, hunger_decay=0.5),
+            ]
         }
         
-    def trainer(self):
-        print("Here you can train your pet to get stronger before they fight in the colosseum.")
+        rarity = None
 
 
+    #def trainer(self):
+        #print("Here you can train your pet to get stronger before they fight in the colosseum.")
 
-    #def colosseum(self)
+
+    #def colosseum(self):
 
     def money(self):
         print(f"You currently have ${self.inventory} in spending cash.")
@@ -172,24 +191,24 @@ class tamagotchi:
             print(f"You earned {num} dollars from looking for change!")
 
     def shop(self, item):
-        print("Welcome to the shop!")
+        print("\nWelcome to the shop!")
          
         stored_items = [
         item("Pancake", "food", 4, 5),
         item("Waffle", "food", 5, 5),
         item("Toy Hammer", "toy", 5, 5),
+        item("Toy Ball", "toy", 4, 6),
         item("Water", "liquid", 3, 5),
         item("Apple Juice", "liquid", 3, 5),
         item("Soda", "liquid", 2, 3),
         item("Egg (Common)", "egg", None, 5),
         item("Egg (Rare)", "egg", None, 10),
-        item("Egg (Legendary)", "egg", None, 20)
+        item("Egg (Legendary)", "egg", None, 20),
+        item("Egg (Ultra Rare)", "egg", None, 100)
     ]
+        
 
-class breed:
-    def __init__(self, breed, traits):
-        self.breed = breed
-        self.traits = traits
+
 
 user_name = input("Enter the name of your pet: ")
 pet = tamagotchi(user_name) 
@@ -212,7 +231,8 @@ while pet.alive:
     print("4. Check status")
     print("5. See your savings")
     print("6. Work a job")
-    print("7. Exit")
+    print("7. Train")
+    print("8. Exit")
 
     user_input = input("\nEnter the number of the thing you would like to do: ")
 
