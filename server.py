@@ -42,5 +42,9 @@ def client_connections(client, addr):
         data = client.recv(1024).decode()
         if not data:
             break
+        data = data.split("|")
+        command = data[0]
+        
+        
     
     

@@ -9,38 +9,41 @@ class item:
         self.effect = effect
         
 class breed:
-    def __init__(self, name, traits, income_bonus=1, hunger_decay=1, happiness_increase=1):
+    def __init__(self, name, traits, income_bonus=1, hunger_decay=1, happiness_increase=1, strength_multiplier=1):
         self.name = name
         self.traits = traits
         self.income_bonus = income_bonus
         self.hunger_decay = hunger_decay
         self.happiness_increase = happiness_increase
+        self.strength_multiplier = strength_multiplier
     
 class tamagotchi:
     
     def __init__(self, name):
         self.name = name
         
-        self.hunger = 5
+        self.hunger = 9
         self.happiness = 5 
-        self.thirst = 5
+        self.thirst = 9
         self.money = 15
         self.inventory = []
         self.alive = True
+        #self.strength = 2
+        #self.energy = 5
 
     def decay_overtime(self):
         while self.alive:
-            time.sleep(200)
+            time.sleep(175)
             self.hunger = min(20, self.hunger + 1)
             self.thirst = min(20, self.thirst + 1)
             self.happiness = max(0, self.happiness - 1)
 
             if self.hunger >= 20:
-                print(f"{pet.name} has straved to death.")
+                print(f"\n{pet.name} has straved to death💀")
                 self.die()
                 break
             if self.thirst >= 20:
-                print(f"{pet.name} has died of dehydration.")
+                print(f"\n{pet.name} has died of dehydration💀")
                 self.die()
                 break
     
@@ -51,7 +54,7 @@ class tamagotchi:
 
     def show_inventory(self):
         if not self.inventory:
-            print("Your inventory is empty.")
+            print("Your inventory is empty")
             return
         
     
@@ -68,23 +71,26 @@ class tamagotchi:
     
         print(f"{self.name}'s stats:")
         print(f"Hunger: {self.hunger}"), 
-        print(f"Energy: {self.energy}"), 
         print(f"Happiness: {self.happiness}") 
         print(f"Thirst: {self.thirst}")
         print(f"Money: {self.money}")
+        #print(f"Strength: {self.strength}")
+        #print(f"Energy: {self.energy}")
 
     def mood(self):
         if self.hunger >= 15:
-            return f"{self.name} is starving." 
+            print(f"{self.name} is starving🍖😟") 
         if self.thirst >= 15:
-            return f"{self.name} is dehydrated."
+            print(f"{self.name} is dehydrated🥤😟")
         if self.happiness >= 10:
-            return f"{self.name} is happy."
+            print(f"{self.name} is happy😊")
         if self.happiness >= 6:
-            return f"{self.name} is neutral." 
+            print(f"{self.name} is neutral😐") 
         if self.happiness >= 3:
-            return f"{self.name} is sad."
-        return f"{self.name} is in a very bad mood."
+            print(f"{self.name} is sad 😢")
+        print(f"{self.name} is in a very bad mood 😤")
+        #if self.energy <= 2:
+            #return f"{self.name} is tired."
     
     def auto_mood(self):
         mood_thread = threading.Thread(target=self.auto_mood)
@@ -98,15 +104,14 @@ class tamagotchi:
 
     def feed(self):
         if not self.alive:
-            print(f"{self.name} is dead.")
+            print(f"{self.name} is dead💀")
             return 
         
         while True:
 
             self.show_inventory()
-            
             user_input = input('\nPick the number of the food you would like to select or type "exit" to go back: ')
-            
+
             if user_input.lower() == "exit":
                 break
 
@@ -118,13 +123,19 @@ class tamagotchi:
                 if selected_item.type == "food":
                     self.hunger = max(0, self.hunger - selected_item.effect)
                     self.inventory.pop(item_index)
-                    print(f"\n{self.name} has been feed with {selected_item.name}. Their hunger is now at {self.hunger}.")
+                    print("\n===========================================================================================")
+                    print(f"{self.name} has been feed with {selected_item.name}. Their hunger is now at {self.hunger}.")
+                    print("===========================================================================================")
                 else:
-                    print("Go find some more food!")
+                    print("\n================")
+                    print("Not a food item!")
+                    print("================")
 
             except ValueError:
-                print("Please enter a valid number or exit to go back.")
-        
+                print("\n===========================================================================================")
+                print('Please enter a valid number or "exit" to go back.')
+                print("===========================================================================================")
+       
     def water(self):
         if not self.alive:
             print(f"{self.name} is dead.")
@@ -146,15 +157,22 @@ class tamagotchi:
                 if selected_item.type == "liquid":
                     self.thirst = max(0, self.thirst - selected_item.effect)
                     self.inventory.pop(item_index)
-                    print(f"\n{self.name} has been given {selected_item.name}. Their thirst is now {self.thirst}.")
+                    print("\n===================================================================================")
+                    print(f"{self.name} has been given {selected_item.name}. Their thirst is now {self.thirst}.")
+                    print("===================================================================================")
                 else:
-                    print("The item you are choosing isn't a liquid!")
+                    print("\n=================")
+                    print("Not a liquid!")
+                    print("=================")
+                    
             except ValueError:
+                print("\n=====================================================")
                 print('Please enter a valid number or type "exit" to return.')
-
+                print("=====================================================")
+                
     def die(self):
         
-        print(f"{pet.name} has died because you failed to take care of it properly.")
+        #print(f"{pet.name} has died 💀 because you failed to take care of them properly.")
         pet.alive = False
 
 
@@ -177,21 +195,46 @@ class tamagotchi:
                 if item_picked.type == "toy":
                     self.thirst -= item_picked.effect
                     self.inventory.pop(item_index)
-                    print(f"\n{self.name}'s happiness has increased by {self.happiness} after playing with {item_picked.name}")
+                    print("\n================================================================================================")
+                    print(f"{self.name}'s happiness has increased by {self.happiness} after playing with {item_picked.name}")
+                    print("================================================================================================")
+                else:
+                    print("\n==========")
+                    print("Not a toy!")
+                    print("==========")
             except ValueError:
+                print("\n=====================================================")
                 print('Please enter a valid number or type "exit" to return.')
+                print("=====================================================")
+    
+    
+    #def trainer(self):
+        
+        
+    #def colosseum(self):
+        
+        
     def gotcha(self):
         print("Current inventory:")
         self.show_inventory()
         
         user_input = input("\nEnter the number of the item you wish to select: ")
-        user_index = int(user_input) -1
         
-        item_picked = self.inventory[user_index]
-        if item_picked.type == "egg":
-            print("Hatching your egg...")
-            time.sleep(3)
-        
+        try:
+                
+            user_index = int(user_input) -1
+            
+            item_picked = self.inventory[user_index]
+            if item_picked.type == "egg":
+                print("\n----------------------->")
+                print("Hatching your egg...")
+                print("----------------------->")
+                time.sleep(3)
+        except ValueError:
+            print("\n=============")
+            print("Not an egg.")
+            print("=============")
+    
         breeds = {
             "Common": [
                 breed("dog", ["loyal"], income_bonus=1.2, happiness_increase=1.2),
@@ -238,7 +281,7 @@ class tamagotchi:
     
     def job(self):
         print("\nWhich job would you like to perform?")
-        print("1. Picking up trash - 2 dollars per piece of trash")
+        print("\n1. Picking up trash - 2 dollars per piece of trash")
         print("2. Look for change under vending machines - 1 to 5 dollars based on the vending machine")
         
         user_input = input("\nEnter the number of the job you would like to perform: ")
@@ -257,28 +300,29 @@ class tamagotchi:
             print(f"You earned {num} dollars from looking for change!")
 
     def shop(self):
-        print("\nWelcome to the shop!")
+        print("\nWelcome to the shop!🏪")
          
         stored_items = {
-            "1": {"name": "Pancake", "type": "food", "effect": 4, "price": 5},
-            "2": {"name": "Waffle", "type": "food", "effect": 5, "price": 6},
-            "3": {"name": "Burger", "type": "food", "effect": 8, "price": 10},
-            "4": {"name": "Toy Ball", "type": "toy", "effect": 4, "price": 6},
-            "5": {"name": "Toy Hammer", "type": "toy", "effect": 5, "price": 7},
-            "6": {"name": "Frisbee", "type": "toy", "effect": 6, "price": 8},
-            "7": {"name": "Water", "type": "liquid", "effect": 3, "price": 4},
-            "8": {"name": "Apple Juice", "type": "liquid", "effect": 4, "price": 5},
-            "9": {"name": "Egg (Common)", "type": "egg", "effect": None, "price": 8},
-            "10": {"name": "Egg (Rare)", "type": "egg", "effect": None, "price": 15},
-            "11": {"name": "Egg (Legendary)", "type": "egg", "effect": None, "price": 30},
-            "12": {"name": "Egg (Ultra Rare)", "type": "egg", "effect": None, "price": 100}
+            "1": {"name": "Pancake 🥞", "type": "food", "effect": 4, "price": 5},
+            "2": {"name": "Waffle 🧇", "type": "food", "effect": 5, "price": 6},
+            "3": {"name": "Burger 🍔", "type": "food", "effect": 8, "price": 10},
+            "4": {"name": "Toy Ball ⚽", "type": "toy", "effect": 4, "price": 6},
+            "5": {"name": "Toy Hammer 🔨", "type": "toy", "effect": 5, "price": 7},
+            "6": {"name": "Frisbee 🥏", "type": "toy", "effect": 6, "price": 8},
+            "7": {"name": "Water 🚰", "type": "liquid", "effect": 3, "price": 4},
+            "8": {"name": "Apple Juice 🧃", "type": "liquid", "effect": 4, "price": 5},
+            "9": {"name": "Egg (Common)🥚", "type": "egg", "effect": None, "price": 8},
+            "10": {"name": "Egg (Rare) 🥚", "type": "egg", "effect": None, "price": 15},
+            "11": {"name": "Egg (Legendary) 🥚", "type": "egg", "effect": None, "price": 30},
+            "12": {"name": "Egg (Ultra Rare)🥚", "type": "egg", "effect": None, "price": 100}
         }
 
 
         while True:
-            print(f"\nThe amount in your savings: ${self.money}")
+            print(f"\nAmount in your savings: ${self.money}")
 
-            print("\nAvailable items:")
+            print("\nAvailable items💰:")
+            
             for num, item_info in stored_items.items():
                 name = item_info["name"]
                 price = item_info["price"]
@@ -289,6 +333,8 @@ class tamagotchi:
                 else:
                     effect_text = ""
                 print(f"{num}. {name} - ${price}{effect_text}")
+
+
 
             print(f'\nEnter the number of the item you would like to buy, or type "exit" if you wish to leave.')
             user_input = input("\nEnter command here: ")
@@ -310,9 +356,10 @@ class tamagotchi:
                         item_info["effect"]
                     )
                     self.inventory.append(new_item)
-            
-                    print(f"\n{new_item.name} has been added to your inventory! you now have ${self.money}.")
-
+                    print("\n====================================================================")
+                    print(f"{new_item.name} has been added to your inventory! you now have ${self.money}.")
+                    print("====================================================================")
+                    time.sleep(2.5)
                     continue
 
 user_name = input("Enter the name of your pet: ")
@@ -342,7 +389,7 @@ while pet.alive:
     print("7. Shop")
     print("8. Exit")
 
-    user_input = input("\nEnter the number of the thing you would like to do: ")
+    user_input = input("\nEnter the number of the item you would like to slect: ")
 
     if user_input == "1":
         pet.feed()
@@ -361,5 +408,5 @@ while pet.alive:
     if user_input == "8":
         print(f"Bye, bye! {pet.name} will be lonely without you.")
         break 
-
+    
 
