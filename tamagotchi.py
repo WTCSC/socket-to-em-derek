@@ -23,13 +23,11 @@ class tamagotchi:
         self.name = name
         
         self.hunger = 9
-        self.happiness = 5 
+        self.happiness = 1 
         self.thirst = 9
         self.money = 15
         self.inventory = []
         self.alive = True
-        #self.strength = 2
-        #self.energy = 5
 
     def decay_overtime(self):
         while self.alive:
@@ -46,7 +44,11 @@ class tamagotchi:
                 print(f"\n{pet.name} has died of dehydration💀")
                 self.die()
                 break
-    
+            if self.happiness == 0:
+                print(f"\n{pet.name} has gone away forever 😔")
+                self.die()
+                break
+            
     def auto_decay(self):
         decay_thread = threading.Thread(target=self.decay_overtime)
         decay_thread.daemon = True
@@ -74,9 +76,7 @@ class tamagotchi:
         print(f"Happiness: {self.happiness}") 
         print(f"Thirst: {self.thirst}")
         print(f"Money: {self.money}")
-        #print(f"Strength: {self.strength}")
-        #print(f"Energy: {self.energy}")
-
+        
     def mood(self):
         if self.hunger >= 15:
             print(f"{self.name} is starving🍖😟") 
@@ -89,9 +89,11 @@ class tamagotchi:
         if self.happiness >= 3:
             print(f"{self.name} is sad 😢")
         print(f"{self.name} is in a very bad mood 😤")
-        #if self.energy <= 2:
-            #return f"{self.name} is tired."
-    
+        
+        if self.happiness <= 4:
+            self.hunger_decay = 5
+            
+        
     def auto_mood(self):
         mood_thread = threading.Thread(target=self.auto_mood)
         mood_thread.deamon = True
@@ -172,7 +174,6 @@ class tamagotchi:
                 
     def die(self):
         
-        #print(f"{pet.name} has died 💀 because you failed to take care of them properly.")
         pet.alive = False
 
 
@@ -206,13 +207,6 @@ class tamagotchi:
                 print("\n=====================================================")
                 print('Please enter a valid number or type "exit" to return.')
                 print("=====================================================")
-    
-    
-    #def trainer(self):
-        
-        
-    #def colosseum(self):
-        
         
     def gotcha(self):
         print("Current inventory:")
@@ -278,6 +272,39 @@ class tamagotchi:
 
     def money(self):
         print(f"You currently have ${self.money} in spending cash.")
+        
+    # def breed_pets(self, pet2):
+    
+    #     breeds = {
+    #     "Dog": ["Loyal", "Energetic"],
+    #     "Cat": ["Independent", "Curious"],
+    #     "Hydra": ["Acceptional Strength", "Three heads"],
+    #     "Phoenix": ["Rebirth", "Fiery"],
+    #     "Wolf": ["Alpha", "Wise"]
+
+    #     }
+        
+    #     new_pet_name = f"{self.name['name']}-{['name']} Jr."
+
+    #     new_traits = random.sample(self.name["traits"], 1) + random.sample(pet2["traits"], 1) 
+
+    #     if self.name["breed"] ==pet2["breed"]:
+    #         new_breed = self.name["breed"]
+    #     else:
+    #         new_breed = f"{self.name['name']}-{pet2['name']} Jr."
+
+    #     new_pet = {
+    #         "name": new_pet_name, 
+    #         "breed": new_breed,
+    #         "traits": new_traits,
+    #         "hunger": (self.name["hunger"] + pet2["hunger"]) // 2,
+    #         "thirst": (self.name["thirst"] + pet2["thirst"]) // 2,
+    #         "happiness": (self.name["happiness"] + pet2["happiness"]) // 2
+    #     }
+
+    #     return new_pet
+
+    
     
     def job(self):
         print("\nWhich job would you like to perform?")
@@ -407,6 +434,6 @@ while pet.alive:
         pet.shop()
     if user_input == "8":
         print(f"Bye, bye! {pet.name} will be lonely without you.")
-        break 
+        break
     
 

@@ -2,16 +2,16 @@
 import socket 
 import threading
 
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-client.connect('localhost', 5000)
-print("Connected to the server")
-
-def register_pet(pet):
-    client.send(f"PET"|{pet.name}|{pet.breed}|{pet.hunger}|{pet.thirst}|{pet.happiness})
-    print(client.recv(1024).decode())
+def connect_server():
     
-def server_messages(pet):
+    global client    
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect("localhost", 5000)
+    print("Connected to the server")
+    
+    return client
+
+def server_messages(client, command):
     
     try:
         while True:
@@ -23,13 +23,29 @@ def server_messages(pet):
     except:
         print("Lost connection.")
         
-def multiplayer(pet):
     
-    register_pet(pet)
+def handle_requests():
+        
+    other_player = input("Enter the IP address of the other player: ")
+    
+    client.send(f"REQUEST|{other_player}").encode()
+    
+    response = client.recv(1024).decode()
+    
+        
+        
+def multiplayer(pet):
+
+    connect_server()
+    
     listener = threading.Thread(target=server_messages, daemon=True)
     listener.start()
 
     
-            
-        
-    
+    while True:
+        command = input('Enter a command or type "exit" to leave multiplayer: ')
+        if command.lower() == "exit":
+            print("Leaving multiplayer")
+            client.close()
+            break
+        client.send("ACTION|{command}").encode()
