@@ -56,7 +56,7 @@ class tamagotchi:
 
     def show_inventory(self):
         if not self.inventory:
-            print("Your inventory is empty")
+            print("\nYour inventory is empty")
             return
         
     
@@ -388,52 +388,4 @@ class tamagotchi:
                     print("====================================================================")
                     time.sleep(2.5)
                     continue
-
-user_name = input("Enter the name of your pet: ")
-pet = tamagotchi(user_name) 
-
-pet.auto_decay()
-pet.auto_mood()
-
-pet.inventory.append(item("Pancake", "food", 4))
-pet.inventory.append(item("Waffle", "food", 5))
-pet.inventory.append(item("Toy Hammer", "toy", 5))
-pet.inventory.append(item("Water", "liquid", 3))
-
-while pet.alive:
-
-    print("\nWhat would you like to do?")
-    print("\n=====================================")
-    print('Type "help" if you want to know more.')
-    print("=====================================")
-    print("\nOptions:")
-    print("\n1. Feed")
-    print("2. Water")
-    print("3. Play")
-    print("4. Hatch eggs")
-    print("5. Check status")
-    print("6. Work a job")
-    print("7. Shop")
-    print("8. Exit")
-
-    user_input = input("\nEnter the number of the item you would like to slect: ")
-
-    if user_input == "1":
-        pet.feed()
-    if user_input == "2":
-        pet.water()
-    if user_input == "3":
-        pet.play()
-    if user_input == "4":
-        pet.gotcha()
-    if user_input == "5":
-        pet.status()
-    if user_input == "6":
-        pet.job()
-    if user_input == "7":
-        pet.shop()
-    if user_input == "8":
-        print(f"Bye, bye! {pet.name} will be lonely without you.")
-        break
     
-

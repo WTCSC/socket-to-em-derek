@@ -1,51 +1,63 @@
 
 import socket 
-import threading
+import tamagotchi
 
 def connect_server():
-    
-    global client    
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect("localhost", 5000)
+    client.connect(("localhost", 5000))
     print("Connected to the server")
     
     return client
 
-def server_messages(client, command):
-    
-    try:
-        while True:
-            
-            message = client.recv(1024).decode()
-            if message:
-                print(f"\nServer: {message}")
-            
-    except:
-        print("Lost connection.")
-        
-    
-def handle_requests():
-        
-    other_player = input("Enter the IP address of the other player: ")
-    
-    client.send(f"REQUEST|{other_player}").encode()
-    
-    response = client.recv(1024).decode()
-    
-        
-        
-def multiplayer(pet):
+client = connect_server()
 
-    connect_server()
-    
-    listener = threading.Thread(target=server_messages, daemon=True)
-    listener.start()
+user_name = input("Enter the name of your pet: ")
+pet = tamagotchi.tamagotchi(user_name) 
 
+pet.auto_decay()
+pet.auto_mood()
+
+while pet.alive:
+    print("\nWhat would you like to do?")
+    print("\n=====================================")
+    print('Type "help" if you want to know more.')
+    print("=====================================")
+    print("\nOptions:")
+    print("\n1. Feed")
+    print("2. Water")
+    print("3. Play")
+    print("4. Hatch eggs")
+    print("5. Check status")
+    print("6. Work a job")
+    print("7. Shop")
+    print("8. Exit")
     
-    while True:
-        command = input('Enter a command or type "exit" to leave multiplayer: ')
-        if command.lower() == "exit":
-            print("Leaving multiplayer")
-            client.close()
-            break
-        client.send("ACTION|{command}").encode()
+    tamagotchi.inventory.append("Pancake", "food", 5)
+
+    user_input = input("\nEnter the number of the item you would like to slect: ")
+    client.send(f"INPUT|{user_input}".encode())
+    
+    message = client.recv(1024).decode()
+
+    if message == "feed":
+        pet.feed()
+    # if user_input == "2":
+    #     pet.water()
+    # if user_input == "3":
+    #     pet.play()
+    # if user_input == "4":
+    #     pet.gotcha()
+    # if user_input == "5":
+    #     pet.status()
+    # if user_input == "6":
+    #     pet.job()
+    # if user_input == "7":
+    #     pet.shop()
+        
+        
+    # if user_input == "8":
+    #     print(f"Bye, bye! {pet.name} will be lonely without you.")
+    #     break
+    
+    
+    
